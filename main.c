@@ -13,5 +13,20 @@
  */
 void main(void) {
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
+    INITSPI();
+    SS_HI();
+    SS_LOW();
+    longdelay();
+    shortdelay();
+    LCDwrite4();
+    LCDwrite8();
+
+
+while(1)
+{
+
+
+}
+
 
 }
