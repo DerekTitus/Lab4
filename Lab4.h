@@ -34,13 +34,14 @@ void LineOne();
 
 void writeChar(char singleChar);
 
-void writeString(char*string1);
-
-void scrollString(char*string2, char*string3);
-
 void writeDataByte(char dataByte);
 void writeCommandNibble(char commandNibble);
 void writeCommandByte(char commandByte);
+
+void writeASCII(char asciiChar);
+void writing(char message[], char messagesize);
+void scrolling(char message[], char messagesize);
+
 
 
 #endif /* LAB4_H_ */

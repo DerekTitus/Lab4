@@ -138,6 +138,8 @@ void writeDataByte(char dataByte)
 void LCDCLEAR()
 {
 	writeCommandByte(1);
+	LCDCON |= RS_MASK;
+	longdelay();
 }
 
 
@@ -145,10 +147,17 @@ void LCDCLEAR()
 void LineTwo()
 {
 	writeCommandByte(0xC0);
+	LCDCON |= RS_MASK;
+	longdelay();
 }
 void LineOne()
 {
 	writeCommandByte(0x40);
+}
+
+void writeASCII(char asciiChar)
+{
+	writeDataByte(asciiChar);
 }
 
 
@@ -178,11 +187,30 @@ void LCDinit()
     shortdelay();
 }
 
-void Scrolling(char*string1,char*string2)
+void writing(char message[], char messagesize)
 {
-	writeString(string1);
-
+	volatile int i = 0;
+	for(i = 0; i < messagesize; i++)
+	{
+		writeChar(message[i]);
+	}
 }
+
+void scrolling(char message[], char messagesize)
+{
+	volatile int i = 0;
+	int place = 0;
+	place = message[0];
+
+
+	for(i=0; i < messagesize; i++)
+	{
+		message[i] = message[i+1];
+	}
+	message[messagesize - 1] = place;
+}
+
+
 
 
 
