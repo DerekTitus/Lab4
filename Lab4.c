@@ -155,7 +155,7 @@ void LineOne()
 	writeCommandByte(0x40);
 }
 
-void writeASCII(char asciiChar)
+void writeChar(char asciiChar)
 {
 	writeDataByte(asciiChar);
 }

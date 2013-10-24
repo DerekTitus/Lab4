@@ -22,7 +22,7 @@ void main(void) {
   LCDinit();
   LCDCLEAR();
 
-  Scrolling(message1,message1);
+  scrolling(message1,message1);
 
 while(1)
 {
