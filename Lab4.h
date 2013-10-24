@@ -8,13 +8,29 @@
 #ifndef LAB4_H_
 #define LAB4_H_
 
-void INITSPI();
+void initSPI();
 
-void INITLCD();
+void LCDinit();
 
-void LCDCLEAR;
+void LCDCLEAR();
 
-void changeLine;
+void SPISEND(char byteToSend);
+
+void SS_HI();
+
+void SS_LOW();
+
+void shortdelay();
+
+void longdelay();
+
+void LCDwrite8(char byteToSend);
+
+void LCDwrite4(char sendNibble);
+
+void LineTwo();
+
+void LineOne();
 
 void writeChar(char singleChar);
 
@@ -22,7 +38,9 @@ void writeString(char*string1);
 
 void scrollString(char*string2, char*string3);
 
-
+void writeDataByte(char dataByte);
+void writeCommandNibble(char commandNibble);
+void writeCommandByte(char commandByte);
 
 
 #endif /* LAB4_H_ */

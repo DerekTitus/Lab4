@@ -7,26 +7,20 @@
 
 #define RS_MASK 0x40
 
-
+char*message1 = "ECE382 is my favorite class!#";
 /*
  * main.c
  */
 void main(void) {
     WDTCTL = WDTPW | WDTHOLD;	// Stop watchdog timer
-    INITSPI();
-    SS_HI();
-    SS_LOW();
-    longdelay();
-    shortdelay();
-    LCDwrite4();
-    LCDwrite8();
 
+  initSPI();
+  LCDinit();
+  LCDCLEAR();
 
-while(1)
-{
+  Scrolling(message1,message1);
 
-
-}
+while(1){}
 
 
 }

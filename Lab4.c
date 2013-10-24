@@ -56,6 +56,25 @@ void shortdelay()
 	__delay_cycles(44);
 }
 
+void SPI_send(char byteToSend)
+{
+    volatile char readByte;
+
+    SS_LOW();
+
+    UCB0TXBUF = byteToSend;
+
+    while(!(UCB0RXIFG & IFG2))
+    {
+        // wait until you've received a byte
+    }
+
+    readByte = UCB0RXBUF;
+
+    SS_HI();
+}
+
+
 void LCDwrite4(char NibbletoSend)
 {
 	unsigned char sendNibble = NibbletoSend;
@@ -63,15 +82,15 @@ void LCDwrite4(char NibbletoSend)
 	sendNibble |= LCDCON;
 
 	sendNibble &= 0x7f;
-	SPISend(sendNibble);
+	SPI_send(sendNibble);
 	shortdelay();
 
 	sendNibble |= 0x00;
-	SPISend(sendNibble);
+	SPI_send(sendNibble);
 	shortdelay();
 
 	sendNibble &= 0x7f;
-	SPISend(sendNibble);
+	SPI_send(sendNibble);
 	shortdelay();
 }
 
@@ -95,13 +114,6 @@ void LCDwrite8(char byteToSend)
 
 
 
-
-void LCDinit()
-{
-
-
-}
-
 void writeCommandNibble(char commandNibble)
 {
     LCDCON &= ~RS_MASK;
@@ -123,29 +135,54 @@ void writeDataByte(char dataByte)
     longdelay();
 }
 
-
-
-void SPI_send(char byteToSend)
+void LCDCLEAR()
 {
-    char readByte;
-
-    SS_LOW();
-
-    UCB0TXBUF = byteToSend;
-
-    while(!(UCB0RXIFG & IFG2))
-    {
-        // wait until you've received a byte
-    }
-
-    readByte = UCB0RXBUF;
-
-    SS_HI();
+	writeCommandByte(1);
 }
 
 
 
+void LineTwo()
+{
+	writeCommandByte(0xC0);
+}
+void LineOne()
+{
+	writeCommandByte(0x40);
+}
 
+
+void LCDinit()
+{
+    writeCommandNibble(0x03);
+
+    writeCommandNibble(0x03);
+
+    writeCommandNibble(0x03);
+
+    writeCommandNibble(0x02);
+
+    writeCommandByte(0x28);
+
+    writeCommandByte(0x0C);
+
+    writeCommandByte(0x01);
+
+    writeCommandByte(0x06);
+
+    writeCommandByte(0x01);
+
+    writeCommandByte(0x02);
+
+    SPI_send(0);
+    shortdelay();
+}
+
+void Scrolling(char*string1,char*string2)
+{
+	writeString(string1);
+
+}
 
 
 
