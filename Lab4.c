@@ -12,15 +12,15 @@
 #include <msp430.h>
 #define RS_MASK 0x40
 
-unsigned char LCDCON;
+unsigned char LCDCON = 0;
 
 
 void initSPI()
 {
+	P1DIR |= BIT0;
 	UCB0CTL1 |= UCSWRST;
 	UCB0CTL0 |= UCCKPH|UCMSB|UCMST|UCSYNC;
 	UCB0CTL1 |= UCSSEL1;
-	UCB0STAT |= UCLISTEN;
 
 	P1SEL |= BIT5;
 	P1SEL2 |= BIT5;
@@ -31,7 +31,7 @@ void initSPI()
 
 	UCB0CTL1 &= ~UCSWRST;
 
-
+	SS_HI();
 }
 
 void SS_HI()
@@ -76,18 +76,18 @@ void SPI_send(char byteToSend)
 void LCDwrite4(char NibbletoSend)
 {
 	unsigned char sendNibble = NibbletoSend;
-	sendNibble &= ~0x0f;
+	sendNibble &= 0x0f;
 	sendNibble |= LCDCON;
 
-	sendNibble &= ~0x7f;
+	sendNibble &= 0x7f;
 	SPI_send(sendNibble);
 	shortdelay();
 
-	sendNibble |= 0x00;
+	sendNibble |= 0x80;
 	SPI_send(sendNibble);
 	shortdelay();
 
-	sendNibble &= ~0x7f;
+	sendNibble &= 0x7f;
 	SPI_send(sendNibble);
 	shortdelay();
 }
@@ -97,7 +97,7 @@ void LCDwrite8(char byteToSend)
 {
     unsigned char sendByte = byteToSend;
 
-    sendByte &= ~0xF0;
+    sendByte &= 0xF0;
 
     sendByte = sendByte >> 4;               // rotate to the right 4 times
 
@@ -105,7 +105,7 @@ void LCDwrite8(char byteToSend)
 
     sendByte = byteToSend;
 
-    sendByte &= ~0x0F;
+    sendByte &= 0x0F;
 
     LCDwrite4(sendByte);
 }
@@ -136,8 +136,6 @@ void writeDataByte(char dataByte)
 void LCDCLEAR()
 {
 	writeCommandByte(1);
-	LCDCON |= RS_MASK;
-	longdelay();
 }
 
 
@@ -145,14 +143,10 @@ void LCDCLEAR()
 void LineTwo()
 {
 	writeCommandByte(0xC0);
-	LCDCON |= RS_MASK;
-	longdelay();
 }
 void LineOne()
 {
-	writeCommandByte(0x40);
-	LCDCON |= RS_MASK;
-	longdelay();
+	writeCommandByte(0x80);
 }
 
 void writeChar(char asciiChar)

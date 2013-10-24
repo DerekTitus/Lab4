@@ -29,10 +29,11 @@ while(1)
 	LineTwo();
 	writing(message2, 8);
 	LineOne();
-	__delay_cycles(10000);	//waits at this screen for 10000 cycles until it shifts to the left(scrolls)
+	__delay_cycles(100000);	//waits at this screen for 10000 cycles until it shifts to the left(scrolls)
 
 	scrolling(message1, message1size);
 	scrolling(message2, message2size);
+	__delay_cycles(100000);
 
 	LCDCLEAR();
 
