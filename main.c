@@ -4,6 +4,7 @@
  */
 
 #include <msp430.h> 
+#include "lab4.h"
 
 #define RS_MASK 0x40
 
@@ -22,10 +23,18 @@ void main(void) {
   LCDinit();
   LCDCLEAR();
 
-  scrolling(message1,message1);
-
 while(1)
 {
+	writing(message1, 8);
+	LineTwo();
+	writing(message2, 8);
+	LineOne();
+	__delay_cycles(10000);	//waits at this screen for 10000 cycles until it shifts to the left(scrolls)
+
+	scrolling(message1, message1size);
+	scrolling(message2, message2size);
+
+	LCDCLEAR();
 
 
 

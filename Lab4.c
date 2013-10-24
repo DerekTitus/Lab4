@@ -29,21 +29,19 @@ void initSPI()
 	P1SEL |= BIT7;
 	P1SEL2 |= BIT7;
 
-	UCB0CTL1 &= UCSWRST;
+	UCB0CTL1 &= ~UCSWRST;
 
 
 }
 
 void SS_HI()
 {
-	P1DIR |= BIT0;
 	P1OUT |= BIT0;
 }
 
 void SS_LOW()
 {
-	P1DIR |= BIT0;
-	P1OUT &= BIT0;
+	P1OUT &= ~BIT0;
 }
 
 void longdelay()
@@ -78,10 +76,10 @@ void SPI_send(char byteToSend)
 void LCDwrite4(char NibbletoSend)
 {
 	unsigned char sendNibble = NibbletoSend;
-	sendNibble &= 0x0f;
+	sendNibble &= ~0x0f;
 	sendNibble |= LCDCON;
 
-	sendNibble &= 0x7f;
+	sendNibble &= ~0x7f;
 	SPI_send(sendNibble);
 	shortdelay();
 
@@ -89,7 +87,7 @@ void LCDwrite4(char NibbletoSend)
 	SPI_send(sendNibble);
 	shortdelay();
 
-	sendNibble &= 0x7f;
+	sendNibble &= ~0x7f;
 	SPI_send(sendNibble);
 	shortdelay();
 }
@@ -99,7 +97,7 @@ void LCDwrite8(char byteToSend)
 {
     unsigned char sendByte = byteToSend;
 
-    sendByte &= 0xF0;
+    sendByte &= ~0xF0;
 
     sendByte = sendByte >> 4;               // rotate to the right 4 times
 
@@ -107,7 +105,7 @@ void LCDwrite8(char byteToSend)
 
     sendByte = byteToSend;
 
-    sendByte &= 0x0F;
+    sendByte &= ~0x0F;
 
     LCDwrite4(sendByte);
 }
@@ -153,6 +151,8 @@ void LineTwo()
 void LineOne()
 {
 	writeCommandByte(0x40);
+	LCDCON |= RS_MASK;
+	longdelay();
 }
 
 void writeChar(char asciiChar)

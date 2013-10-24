@@ -38,7 +38,6 @@ void writeDataByte(char dataByte);
 void writeCommandNibble(char commandNibble);
 void writeCommandByte(char commandByte);
 
-void writeASCII(char asciiChar);
 void writing(char message[], char messagesize);
 void scrolling(char message[], char messagesize);
 
